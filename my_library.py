@@ -12,18 +12,11 @@ def prior_prob(table, target, targetVal):
 
   return pA
 
-def cond_prob(table, A, ax, B, bx):
-  subTable = up_table_subset(table, A, 'equals', ax)
-  subList  = up_get_column(subTable, B)
-
-  AColumn = up_get_column(table, A)
-  BColumn = up_get_column(table, B)
-
-  pBA = sum([1 if i == bx else 0 for i in subList])/len(subList)
-  pA  = sum([1 if i == ax else 0 for i in AColumn])/len(AColumn)
-  pB  = sum([1 if i == bx else 0 for i in BColumn])/len(BColumn)
-
-  return pBA * pA / pB
+def cond_prob(table, evidence, evidence_value, target, target_value):
+  t_subset = up_table_subset(table, target, 'equals', target_value)
+  e_list = up_get_column(t_subset, evidence)
+  p_b_a = sum([1 if v==evidence_value else 0 for v in e_list])/len(e_list)
+  return p_b_a + .01  #Laplace smoothing factor
 
 def cond_probs_product(table, evidenceRow, target, targetVal):
   zipColumnRow = up_zip_lists(table.columns[:-1], evidenceRow)
