@@ -6,6 +6,12 @@ def compute_probs(neg,pos):
   p1 = pos/(neg+pos)
   return [p0,p1]
 
+def prior_prob(table, target, targetVal):
+  columnList = up_get_column(table, target)
+  pA = sum([1 if i == targetVal else 0 for i in columnList])/len(columnList)
+
+  return pA
+
 def cond_prob(table, A, ax, B, bx):
   subTable = up_table_subset(table, A, 'equals', ax)
   subList  = up_get_column(subTable, B)
