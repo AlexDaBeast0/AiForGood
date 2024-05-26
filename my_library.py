@@ -39,3 +39,22 @@ def naive_bayes(table, evidence_row, target):
   
   neg, pos = compute_probs(prob_target_no, prob_target_yes)
   return [neg, pos]
+
+def metrics(zipped_list):
+  assert isinstance(zipped_list, (list, tuple, set)), 'Paramater is not a list'
+  assert all([isinstance(i, (list, tuple, set)) for i in zipped_list]), 'parameter is not list of lists'
+  assert all([len(i) == 2 for i in zipped_list]), 'Each value is not a pair'
+  assert all([i.__class__ == int and j.__class__ == int for i, j in zipped_list]), 'Each value must be an int'
+  assert all([i and j >= 0 for i, j in zipped_list]), 'Each value must be >= 0'
+
+  tn = sum([1 if pair==[0,0] else 0 for pair in zipped_list])
+  tp = sum([1 if pair==[1,1] else 0 for pair in zipped_list])
+  fp = sum([1 if pair==[1,0] else 0 for pair in zipped_list])
+  fn = sum([1 if pair==[0,1] else 0 for pair in zipped_list])
+
+  precision = tp / (tp + fp) if (tp + fp) else 0
+  recall = tp / (tp + fn) if (tp + fn) else 0
+  accuracy = (tp + tn) / (tp+tn+fp+fn) if (tp+tn+fp+fn) else 0
+  f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) else 0
+
+  return {'Precision': precision, 'Recall': recall, 'F1': f1, 'Accuracy': accuracy}
