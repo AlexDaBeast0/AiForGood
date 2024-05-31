@@ -44,7 +44,8 @@ def metrics(zipped_list):
   assert isinstance(zipped_list, (list, tuple, set)), 'Paramater is not a list'
   assert all([isinstance(i, (list, tuple, set)) for i in zipped_list]), 'parameter is not list of lists'
   assert all([len(i) == 2 for i in zipped_list]), 'Each value is not a pair'
-  assert all([i.__class__ == int and j.__class__ == int for i, j in zipped_list]), 'Each value must be an int'
+  assert all([isinstance(a,(int,float)) and isinstance(b,(int,float)) for a,b in zipped_list]), 'zipped_list contains a non-int or non-float'
+  assert all([float(a) in [0.0,1.0] and float(b) in [0.0,1.0] for a,b in zipped_list]), 'zipped_list contains a non-binary value'
   assert all([i >= 0 and j >= 0 for i, j in zipped_list]), 'Each value must be >= 0'
 
   tn = sum([1 if pair==[0,0] else 0 for pair in zipped_list])
