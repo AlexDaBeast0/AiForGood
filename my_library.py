@@ -60,8 +60,7 @@ def metrics(zipped_list):
 
   return {'Precision': precision, 'Recall': recall, 'F1': f1, 'Accuracy': accuracy}
 
-def try_archs(full_table, table_split, target, architectures, thresholds):
-  trainTable, testTable = up_train_test_split(full_table, target, table_split)
+def try_archs(testTable, trainTable, target, architectures, thresholds):
   #loop through your architecutes and get results
   for arch in architectures:
     neuralNetwork = up_neural_net(trainTable, testTable, arch, target)
