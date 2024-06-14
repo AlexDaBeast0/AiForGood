@@ -59,3 +59,22 @@ def metrics(zipped_list):
   f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) else 0
 
   return {'Precision': precision, 'Recall': recall, 'F1': f1, 'Accuracy': accuracy}
+
+def try_archs(full_table, table_split, target, architectures, thresholds):
+  trainTable, testTable = up_train_test_split(full_table, target, table_split)
+  #loop through your architecutes and get results
+  for arch in architectures:
+    neuralNetwork = up_neural_net(trainTable, testTable, arch, target)
+    positveProbs = [p for n, p in neuralNetwork]
+
+    #loop through thresholds
+    allMetrics = []
+    for thresh in thresholds:
+      predictions = [1 if i>thresh else 0 for i in positveProbs]
+      zipPredictionActual = up_zip_lists(predictions, up_get_column(testTable, target))
+      mets = metrics(zipPredictionActual)
+      mets['Threshold'] = thresh
+      allMetrics += [mets]
+
+    print(f'Architecture: {arch}')
+    print(up_metrics_table(allMetrics))
